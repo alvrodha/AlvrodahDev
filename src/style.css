@@ -1,0 +1,64 @@
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f1012;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a2e37;
+    border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ccff00;
+}
+
+/* Scanline effect for terminal header */
+.scanlines {
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.3)
+    );
+    background-size: 100% 4px;
+}
+
+.crt-overlay {
+    position: relative;
+}
+
+.crt-overlay::after {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background: rgba(18, 16, 16, 0.05);
+    content: " ";
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Ticker animation */
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    display: flex;
+    width: 200%;
+    animation: marquee 20s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
