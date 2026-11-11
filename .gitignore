@@ -1,0 +1,29 @@
+node_modules/
+dist/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local archives and backups
+/archive/
+/archives/
+/backups/
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.bak
+*.backup
+
+# Local tooling
+.DS_Store
+Thumbs.db
+*.log
