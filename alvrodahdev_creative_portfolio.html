@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alvrodahDev // Creative Software Engineer & System Architect</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        raw: {
+                            bg: '#0F1012',
+                            panel: '#16181D',
+                            border: '#2A2E37',
+                            accent: '#CCFF00', // Acid Lime
+                            accent2: '#FF3366', // Hot Cyber Pink
+                            text: '#E2E8F0',
+                            dim: '#8A94A6',
+                            white: '#FFFFFF'
+                        }
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #CCFF00',
+                        'brutal-pink': '4px 4px 0px 0px #FF3366',
+                        'brutal-white': '4px 4px 0px 0px #FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F1012;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A2E37;
+            border-radius: 0px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #CCFF00;
+        }
+
+        /* Scanline effect for terminal header */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+        }
+
+        .crt-overlay {
+            position: relative;
+        }
+        .crt-overlay::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: rgba(18, 16, 16, 0.05);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Ticker Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 20s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="bg-raw-bg text-raw-text font-sans antialiased selection:bg-raw-accent selection:text-black">
+
+    <!-- Top Status Bar (Editorial Ticker) -->
+    <div class="border-b border-raw-border bg-black text-xs font-mono py-1.5 overflow-hidden flex items-center justify-between sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+        <div class="flex items-center space-x-4 pl-4 shrink-0 z-10 bg-black pr-4 border-r border-raw-border">
+            <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-raw-accent opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-raw-accent"></span>
+            </span>
+            <span class="font-bold text-raw-accent tracking-widest uppercase">alvrodahDev</span>
+            <span class="text-raw-dim hidden sm:inline">[STATUS: AVAILABLE_FOR_HIRE]</span>
+        </div>
+
+        <!-- Marquee Announcement -->
+        <div class="overflow-hidden whitespace-nowrap flex-1">
+            <div class="animate-marquee text-raw-dim text-xs">
+                <span class="mx-4">⚡ SYSTEM: OPERATIONAL</span>
+                <span class="text-raw-accent">/// TECH STACK: RUST, TYPESCRIPT, PYTHON, DOCKER, REACT</span>
+                <span class="mx-4">⚡ BUILDING HIGH-PERFORMANCE WEB & BACKEND SYSTEMS</span>
+                <span class="text-raw-accent2">/// OPEN FOR FREELANCE & FULL-TIME ROLES</span>
+                <span class="mx-4">⚡ SYSTEM: OPERATIONAL</span>
+                <span class="text-raw-accent">/// TECH STACK: RUST, TYPESCRIPT, PYTHON, DOCKER, REACT</span>
+                <span class="mx-4">⚡ BUILDING HIGH-PERFORMANCE WEB & BACKEND SYSTEMS</span>
+            </div>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-3 pr-4 shrink-0 font-mono text-raw-dim pl-4 border-l border-raw-border">
+            <span id="live-clock">00:00:00 UTC</span>
+            <span class="text-raw-accent">loc: 40.4168°N, 3.7038°W</span>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="border-b border-raw-border bg-raw-bg/80 backdrop-blur-md sticky top-7 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="font-mono text-xl font-bold tracking-tighter text-raw-white hover:text-raw-accent transition-colors flex items-center gap-2">
+                        <span class="text-raw-accent">&lt;</span>alvrodah.dev<span class="text-raw-accent">&gt;</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex items-center space-x-1 font-mono text-sm">
+                    <a href="#about" class="px-3 py-2 text-raw-dim hover:text-raw-accent hover:bg-raw-panel transition-all">01.// ABOUT</a>
+                    <a href="#skills" class="px-3 py-2 text-raw-dim hover:text-raw-accent hover:bg-raw-panel transition-all">02.// SKILLS</a>
+                    <a href="#projects" class="px-3 py-2 text-raw-dim hover:text-raw-accent hover:bg-raw-panel transition-all">03.// PROJECTS</a>
+                    <a href="#terminal" class="px-3 py-2 text-raw-dim hover:text-raw-accent hover:bg-raw-panel transition-all">04.// TERMINAL</a>
+                    <a href="#contact" class="ml-4 px-4 py-2 border border-raw-accent text-raw-accent hover:bg-raw-accent hover:text-black font-bold transition-all shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px]">
+                        EXECUTE_CONTACT()
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="p-2 border border-raw-border text-raw-dim hover:text-raw-accent hover:border-raw-accent">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-raw-border bg-raw-panel px-4 pt-2 pb-4 space-y-2 font-mono text-sm">
+            <a href="#about" class="block px-3 py-2 text-raw-dim hover:text-raw-accent">01.// ABOUT</a>
+            <a href="#skills" class="block px-3 py-2 text-raw-dim hover:text-raw-accent">02.// SKILLS</a>
+            <a href="#projects" class="block px-3 py-2 text-raw-dim hover:text-raw-accent">03.// PROJECTS</a>
+            <a href="#terminal" class="block px-3 py-2 text-raw-dim hover:text-raw-accent">04.// TERMINAL</a>
+            <a href="#contact" class="block w-full text-center px-4 py-2 mt-2 border border-raw-accent text-raw-accent hover:bg-raw-accent hover:text-black font-bold">
+                EXECUTE_CONTACT()
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: Asymmetrical Brutalist Layout -->
+    <section id="about" class="py-16 md:py-24 border-b border-raw-border relative overflow-hidden">
+        <!-- Background Grid Pattern -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1b1f27_1px,transparent_1px),linear-gradient(to_bottom,#1b1f27_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-40"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Hero Content (7 Cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-raw-panel border border-raw-border text-xs font-mono text-raw-accent">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                        <span>FULL-STACK ARCHITECT & SYSTEMS ENGINEER</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-raw-white leading-none">
+                        CODE THAT <br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-raw-accent via-white to-raw-accent2">BREAKS THE MONOTONY.</span>
+                    </h1>
+
+                    <p class="text-lg text-raw-dim font-mono max-w-2xl leading-relaxed">
+                        Hi, I'm <strong class="text-raw-white">Álvaro (alvrodah)</strong>. I craft high-throughput backend services, interactive frontend applications, and robust developer toolchains with meticulous craftsmanship.
+                    </p>
+
+                    <!-- Key Metrics / Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 pt-4 border-t border-raw-border font-mono">
+                        <div>
+                            <div class="text-2xl lg:text-3xl font-bold text-raw-accent">5+ YEARS</div>
+                            <div class="text-xs text-raw-dim uppercase">Production Code</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl lg:text-3xl font-bold text-raw-accent2">99.9%</div>
+                            <div class="text-xs text-raw-dim uppercase">Uptime Mindset</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl lg:text-3xl font-bold text-raw-white">40+</div>
+                            <div class="text-xs text-raw-dim uppercase">Repos Shipped</div>
+                        </div>
+                    </div>
+
+                    <!-- Call To Actions -->
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#projects" class="px-6 py-3 bg-raw-accent text-black font-bold font-mono text-sm tracking-wide hover:bg-white transition-all shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] flex items-center gap-2">
+                            <span>EXPLORE WORK</span>
+                            <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#terminal" class="px-6 py-3 bg-raw-panel border border-raw-border text-raw-white font-mono text-sm hover:border-raw-accent transition-all flex items-center gap-2">
+                            <i data-lucide="command" class="w-4 h-4 text-raw-accent"></i>
+                            <span>LAUNCH TERMINAL</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Interactive Hero Card (5 Cols) -->
+                <div class="lg:col-span-5">
+                    <div class="border border-raw-border bg-raw-panel p-6 shadow-2xl relative">
+                        <!-- Card Top Bar -->
+                        <div class="flex items-center justify-between pb-4 border-b border-raw-border font-mono text-xs">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                            </div>
+                            <span class="text-raw-dim">developer_manifesto.json</span>
+                        </div>
+
+                        <!-- Code Preview Block inside Hero Card -->
+                        <div class="pt-4 font-mono text-xs sm:text-sm space-y-3 leading-relaxed text-raw-dim">
+                            <div>
+                                <span class="text-raw-accent2">const</span> <span class="text-raw-accent">alvrodah</span> = {
+                            </div>
+                            <div class="pl-4">
+                                <span class="text-raw-white">role:</span> <span class="text-yellow-300">"Senior Software Engineer"</span>,
+                            </div>
+                            <div class="pl-4">
+                                <span class="text-raw-white">passions:</span> [
+                                <span class="text-yellow-300">"Distributed Systems"</span>, 
+                                <span class="text-yellow-300">"UI UX Mechanics"</span>, 
+                                <span class="text-yellow-300">"CLI Tools"</span>],
+                            </div>
+                            <div class="pl-4">
+                                <span class="text-raw-white">favoriteStack:</span> {
+                            </div>
+                            <div class="pl-8 text-raw-accent">
+                                core: <span class="text-yellow-300">"TypeScript / Node"</span>,<br/>
+                                systems: <span class="text-yellow-300">"Rust / Go"</span>,<br/>
+                                web: <span class="text-yellow-300">"React / Next.js / Tailwind"</span>,<br/>
+                                db: <span class="text-yellow-300">"PostgreSQL / Redis"</span>
+                            </div>
+                            <div class="pl-4">},</div>
+                            <div class="pl-4">
+                                <span class="text-raw-white">status:</span> <span class="text-raw-accent">"Building the future of web"</span>
+                            </div>
+                            <div>};</div>
+                        </div>
+
+                        <!-- Mini Interactive Widget inside Card -->
+                        <div class="mt-6 pt-4 border-t border-raw-border flex items-center justify-between font-mono text-xs">
+                            <span class="text-raw-dim">Need quick info?</span>
+                            <button id="copy-json-btn" class="text-raw-accent hover:underline flex items-center gap-1">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>Copy Stack JSON</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 02: INTERACTIVE SKILL MATRIX -->
+    <section id="skills" class="py-20 border-b border-raw-border bg-raw-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Title -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-raw-border pb-6">
+                <div>
+                    <span class="font-mono text-xs text-raw-accent uppercase tracking-widest">// 02. TECHNICAL ARCHITECTURE</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-raw-white mt-1">SKILL MATRIX & CAPABILITIES</h2>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <!-- Filter Tabs -->
+                    <div class="flex flex-wrap gap-2 font-mono text-xs" id="skill-filter-container">
+                        <button data-filter="all" class="skill-filter-btn px-3 py-1.5 border border-raw-accent bg-raw-accent text-black font-bold">ALL_MODULES</button>
+                        <button data-filter="languages" class="skill-filter-btn px-3 py-1.5 border border-raw-border text-raw-dim hover:border-raw-accent hover:text-raw-white">LANGUAGES</button>
+                        <button data-filter="frontend" class="skill-filter-btn px-3 py-1.5 border border-raw-border text-raw-dim hover:border-raw-accent hover:text-raw-white">FRONTEND</button>
+                        <button data-filter="backend" class="skill-filter-btn px-3 py-1.5 border border-raw-border text-raw-dim hover:border-raw-accent hover:text-raw-white">BACKEND</button>
+                        <button data-filter="devops" class="skill-filter-btn px-3 py-1.5 border border-raw-border text-raw-dim hover:border-raw-accent hover:text-raw-white">DEVOPS & TOOLS</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="skills-grid">
+                
+                <!-- Skill Card 1 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="languages">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="code-2" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">PRO-LEVEL</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">TypeScript / JavaScript</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">ESNext, Async Architecture, Type-Safety, Generics, AST Manipulation.</p>
+                    <!-- Skill Bar -->
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[95%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 2 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="languages">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">ADVANCED</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">Rust & Systems</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">Memory Safety, Tokio Async, Cargo Tools, WebAssembly compilation.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[80%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 3 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="frontend">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="layout" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">PRO-LEVEL</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">React & Next.js</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">App Router, SSR, Server Components, State Machines, Tailwind Engine.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[92%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 4 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="backend">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="server" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">PRO-LEVEL</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">Node.js / Express / Nest</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">Microservices, REST APIs, GraphQL APIs, Event-Driven Architecture.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[90%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 5 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="backend">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="database" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">ADVANCED</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">PostgreSQL & Redis</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">Query Optimization, Schema Design, Caching Patterns, Pub/Sub Engine.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[85%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 6 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="devops">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="box" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">ADVANCED</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">Docker & Containers</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">Multi-stage builds, Container Orchestration, Docker Compose, Micro-environments.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[88%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 7 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="languages">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="terminal-square" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">ADVANCED</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">Python & AI Tooling</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">FastAPI, PyTorch basics, Data Pipelines, LLM API integration.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[82%]"></div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 8 -->
+                <div class="skill-card border border-raw-border bg-raw-panel p-5 hover:border-raw-accent transition-all group" data-category="devops">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 border border-raw-border bg-raw-bg text-raw-accent group-hover:bg-raw-accent group-hover:text-black transition-colors">
+                            <i data-lucide="git-branch" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-mono text-xs text-raw-dim">EXPERT</span>
+                    </div>
+                    <h3 class="font-mono font-bold text-lg text-raw-white mb-1">CI/CD & Git Ops</h3>
+                    <p class="text-xs text-raw-dim font-mono mb-4">GitHub Actions, Automated Testing pipelines, Semantic Versioning.</p>
+                    <div class="w-full bg-raw-bg border border-raw-border h-2">
+                        <div class="bg-raw-accent h-full w-[94%]"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 03: FEATURED PROJECTS -->
+    <section id="projects" class="py-20 border-b border-raw-border bg-raw-panel/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-raw-border pb-6">
+                <div>
+                    <span class="font-mono text-xs text-raw-accent uppercase tracking-widest">// 03. SHIPPED SOFTWARE</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-raw-white mt-1">SELECTED PROJECTS</h2>
+                </div>
+                <p class="font-mono text-xs text-raw-dim max-w-sm mt-2 md:mt-0">
+                    Production systems, open-source utilities, and high-performance experimental applications.
+                </p>
+            </div>
+
+            <!-- Projects Grid (Asymmetrical) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Project 1: Large Featured Card (8 Cols) -->
+                <div class="lg:col-span-8 border border-raw-border bg-raw-panel p-6 relative group hover:border-raw-accent transition-all">
+                    <div class="flex items-center justify-between font-mono text-xs mb-4 text-raw-dim">
+                        <span class="text-raw-accent font-bold">[PROJECT_01]</span>
+                        <span>RUST / WASM / CANVAS</span>
+                    </div>
+
+                    <h3 class="text-2xl sm:text-3xl font-bold text-raw-white group-hover:text-raw-accent transition-colors mb-3">
+                        KINETIC-ENGINE: High Speed WebGL Canvas Renderer
+                    </h3>
+
+                    <p class="font-mono text-sm text-raw-dim mb-6 leading-relaxed">
+                        A lightweight zero-dependency rendering framework compiled from Rust to WebAssembly. Designed for 60fps data visualizations and particle simulations in the browser.
+                    </p>
+
+                    <!-- Interactive Live Preview Component inside Card -->
+                    <div class="border border-raw-border bg-raw-bg h-48 mb-6 relative overflow-hidden flex items-center justify-center crt-overlay">
+                        <canvas id="project-canvas" class="w-full h-full"></canvas>
+                        <div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 text-[10px] font-mono text-raw-accent border border-raw-border">
+                            LIVE CANVAS ENGINE SIMULATION
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">Rust</span>
+                            <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">WebAssembly</span>
+                            <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">TypeScript</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="#" class="text-raw-white hover:text-raw-accent flex items-center gap-1">
+                                <i data-lucide="github" class="w-4 h-4"></i> Source
+                            </a>
+                            <a href="#" class="text-raw-accent hover:underline flex items-center gap-1">
+                                <i data-lucide="external-link" class="w-4 h-4"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Side Feature (4 Cols) -->
+                <div class="lg:col-span-4 border border-raw-border bg-raw-panel p-6 flex flex-col justify-between hover:border-raw-accent2 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-xs mb-4 text-raw-dim">
+                            <span class="text-raw-accent2 font-bold">[PROJECT_02]</span>
+                            <span>NODE / REDIS</span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-raw-white hover:text-raw-accent2 transition-colors mb-3">
+                            HYPER-QUEUE: Distributed Task Dispatcher
+                        </h3>
+
+                        <p class="font-mono text-xs text-raw-dim mb-6 leading-relaxed">
+                            Ultra-fast job processing queue built on Redis Streams with automatic backpressure control and telemetry dashboards.
+                        </p>
+
+                        <!-- CLI Visual Simulator -->
+                        <div class="bg-black border border-raw-border p-3 font-mono text-[11px] text-raw-accent mb-6 leading-tight">
+                            <p class="text-raw-dim">// Queue Status</p>
+                            <p>[QUEUE] Active Workers: 16</p>
+                            <p>[JOBS] Processed: 1,489,200/s</p>
+                            <p class="text-raw-accent2">[ALERT] Latency: 1.2ms (p99)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between font-mono text-xs pt-4 border-t border-raw-border">
+                        <span class="text-raw-dim">TypeScript, Redis</span>
+                        <a href="#" class="text-raw-accent2 hover:underline flex items-center gap-1">
+                            <i data-lucide="github" class="w-4 h-4"></i> Repository
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 3: Medium Card (6 Cols) -->
+                <div class="lg:col-span-6 border border-raw-border bg-raw-panel p-6 hover:border-raw-accent transition-all">
+                    <div class="flex items-center justify-between font-mono text-xs mb-4 text-raw-dim">
+                        <span class="text-raw-accent font-bold">[PROJECT_03]</span>
+                        <span>NEXT.JS / TAILWIND</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-raw-white mb-2">
+                        DEV-DOCK: Minimalist Developer Dashboard
+                    </h3>
+
+                    <p class="font-mono text-xs text-raw-dim mb-4">
+                        A customized browser startpage for developers tracking GitHub events, server health, and deployments in real time.
+                    </p>
+
+                    <div class="flex items-center gap-3 font-mono text-xs">
+                        <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">Next.js</span>
+                        <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">Tailwind</span>
+                        <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">GraphQL</span>
+                    </div>
+                </div>
+
+                <!-- Project 4: Medium Card (6 Cols) -->
+                <div class="lg:col-span-6 border border-raw-border bg-raw-panel p-6 hover:border-raw-accent transition-all">
+                    <div class="flex items-center justify-between font-mono text-xs mb-4 text-raw-dim">
+                        <span class="text-raw-accent font-bold">[PROJECT_04]</span>
+                        <span>PYTHON / FASTAPI</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-raw-white mb-2">
+                        LOG-SYNAPSE: AI-Powered Log Anomaly Parser
+                    </h3>
+
+                    <p class="font-mono text-xs text-raw-dim mb-4">
+                        Automated log parsing daemon that flags anomalous patterns in application logs using vector embeddings.
+                    </p>
+
+                    <div class="flex items-center gap-3 font-mono text-xs">
+                        <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">Python</span>
+                        <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">FastAPI</span>
+                        <span class="px-2 py-1 bg-raw-bg border border-raw-border text-raw-dim">ChromaDB</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 04: INTERACTIVE TERMINAL SIMULATOR -->
+    <section id="terminal" class="py-20 border-b border-raw-border bg-raw-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-raw-border pb-4">
+                <div>
+                    <span class="font-mono text-xs text-raw-accent uppercase tracking-widest">// 04. INTERACTIVE CLI</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-raw-white mt-1">EMBEDDED TERMINAL SIMULATOR</h2>
+                </div>
+                <div class="font-mono text-xs text-raw-dim mt-2 md:mt-0">
+                    Type <span class="text-raw-accent">`help`</span> to inspect available shell commands.
+                </div>
+            </div>
+
+            <!-- Terminal Window -->
+            <div class="border-2 border-raw-border bg-black shadow-brutal font-mono text-xs sm:text-sm overflow-hidden">
+                <!-- Terminal Bar -->
+                <div class="bg-raw-panel px-4 py-3 border-b border-raw-border flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span class="ml-2 text-raw-dim text-xs">bash - alvrodah@dev-box:~</span>
+                    </div>
+                    <div class="text-raw-dim text-xs hidden sm:block">TTY /dev/pts/0</div>
+                </div>
+
+                <!-- Terminal Output Buffer -->
+                <div id="terminal-body" class="p-4 sm:p-6 h-80 overflow-y-auto space-y-3 font-mono text-raw-text">
+                    <div class="text-raw-dim">
+                        alvrodahOS v2.4.0-release (x86_64-pc-linux-gnu)<br/>
+                        Type <span class="text-raw-accent font-bold">'help'</span> for a list of available commands.
+                    </div>
+                    
+                    <div class="text-raw-accent">
+                        Welcome visitor! Explore portfolio parameters via interactive shell.
+                    </div>
+                </div>
+
+                <!-- Command Input Box -->
+                <div class="border-t border-raw-border bg-raw-panel px-4 py-3 flex items-center gap-2">
+                    <span class="text-raw-accent font-bold">visitor@alvrodah:~$</span>
+                    <input type="text" id="terminal-input" class="bg-transparent border-none outline-none text-raw-white flex-1 font-mono focus:ring-0" placeholder="Type command here..." autofocus>
+                    <button id="terminal-submit" class="px-3 py-1 bg-raw-accent text-black font-bold text-xs hover:bg-white transition-colors">
+                        RUN
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 05: CONTACT / EXECUTE CALL -->
+    <section id="contact" class="py-20 border-b border-raw-border bg-raw-panel/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Contact Info (5 cols) -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="font-mono text-xs text-raw-accent uppercase tracking-widest">// 05. INITIALIZE CONNECTION</span>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-raw-white">LET'S BUILD SOMETHING ROBUST.</h2>
+                    <p class="font-mono text-sm text-raw-dim leading-relaxed">
+                        Whether you need a full-stack web application, high-throughput API architecture, or technical leadership for your tech stack—I'm open for inquiries.
+                    </p>
+
+                    <div class="space-y-4 font-mono text-sm pt-4 border-t border-raw-border">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-raw-accent"></i>
+                            <span class="text-raw-dim">EMAIL:</span>
+                            <a href="mailto:contact@alvrodah.dev" class="text-raw-white hover:text-raw-accent underline">contact@alvrodah.dev</a>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="github" class="w-5 h-5 text-raw-accent"></i>
+                            <span class="text-raw-dim">GITHUB:</span>
+                            <a href="https://github.com" target="_blank" class="text-raw-white hover:text-raw-accent underline">github.com/alvrodah</a>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-raw-accent"></i>
+                            <span class="text-raw-dim">LINKEDIN:</span>
+                            <a href="https://linkedin.com" target="_blank" class="text-raw-white hover:text-raw-accent underline">linkedin.com/in/alvrodah</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form (7 cols) -->
+                <div class="lg:col-span-7">
+                    <form id="contact-form" class="border border-raw-border bg-raw-panel p-6 sm:p-8 space-y-6 shadow-brutal">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 font-mono text-xs">
+                            <div>
+                                <label class="block text-raw-dim mb-2 uppercase">// YOUR_NAME</label>
+                                <input type="text" required class="w-full bg-raw-bg border border-raw-border p-3 text-raw-white font-mono focus:border-raw-accent focus:outline-none" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-raw-dim mb-2 uppercase">// YOUR_EMAIL</label>
+                                <input type="email" required class="w-full bg-raw-bg border border-raw-border p-3 text-raw-white font-mono focus:border-raw-accent focus:outline-none" placeholder="john@example.com">
+                            </div>
+                        </div>
+
+                        <div class="font-mono text-xs">
+                            <label class="block text-raw-dim mb-2 uppercase">// PROJECT_SCOPE</label>
+                            <select class="w-full bg-raw-bg border border-raw-border p-3 text-raw-white font-mono focus:border-raw-accent focus:outline-none">
+                                <option>Full Web Application Development</option>
+                                <option>Backend & API Architecture</option>
+                                <option>System Performance Optimization</option>
+                                <option>Contract / Freelance Role</option>
+                            </select>
+                        </div>
+
+                        <div class="font-mono text-xs">
+                            <label class="block text-raw-dim mb-2 uppercase">// TRANSMISSION_BODY</label>
+                            <textarea rows="4" required class="w-full bg-raw-bg border border-raw-border p-3 text-raw-white font-mono focus:border-raw-accent focus:outline-none" placeholder="Describe the project scope, timeline, and requirements..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-raw-accent text-black font-bold font-mono text-sm tracking-wider hover:bg-white transition-all shadow-brutal">
+                            SEND_TRANSMISSION()
+                        </button>
+                        
+                        <div id="form-status" class="hidden font-mono text-xs text-center p-3 border border-raw-accent bg-raw-accent/10 text-raw-accent">
+                            [SUCCESS]: Transmission dispatched. Will respond within 24 hours.
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-8 bg-black border-t border-raw-border font-mono text-xs text-raw-dim">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                © 2026 <span class="text-raw-white font-bold">alvrodahDev</span>. All rights reserved.
+            </div>
+            <div class="flex gap-6">
+                <a href="#about" class="hover:text-raw-accent">TOP</a>
+                <a href="#skills" class="hover:text-raw-accent">SKILLS</a>
+                <a href="#projects" class="hover:text-raw-accent">PROJECTS</a>
+                <a href="#terminal" class="hover:text-raw-accent">CLI</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // 1. Live UTC Clock Timer
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toUTCString().split(' ')[4] + ' UTC';
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) clockEl.innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // 3. Interactive Skill Filtering Matrix
+        const filterBtns = document.querySelectorAll('.skill-filter-btn');
+        const skillCards = document.querySelectorAll('.skill-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button state
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-raw-accent', 'text-black', 'font-bold');
+                    b.classList.add('text-raw-dim', 'border-raw-border');
+                });
+                btn.classList.add('bg-raw-accent', 'text-black', 'font-bold');
+                btn.classList.remove('text-raw-dim', 'border-raw-border');
+
+                const filter = btn.getAttribute('data-filter');
+
+                skillCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 4. Interactive Hero Canvas Simulation (Particle mesh)
+        const canvas = document.getElementById('project-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resizeCanvas() {
+                width = canvas.width = canvas.parentElement.clientWidth;
+                height = canvas.height = canvas.parentElement.clientHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    radius: Math.random() * 2 + 1
+                });
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = '#CCFF00';
+                ctx.strokeStyle = 'rgba(204, 255, 0, 0.15)';
+
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let p2 = particles[j];
+                        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                        if (dist < 80) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(drawParticles);
+            }
+            drawParticles();
+        }
+
+        // 5. Interactive Terminal Simulator Logic
+        const terminalBody = document.getElementById('terminal-body');
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalSubmit = document.getElementById('terminal-submit');
+
+        const commands = {
+            'help': 'Available commands: <br/>- <span class="text-raw-accent">skills</span>: Display core stack<br/>- <span class="text-raw-accent">projects</span>: View featured projects<br/>- <span class="text-raw-accent">cat bio.txt</span>: Print developer bio<br/>- <span class="text-raw-accent">clear</span>: Clear terminal window<br/>- <span class="text-raw-accent">contact</span>: Show contact links',
+            'skills': 'CORE TECH: TypeScript, Rust, Node.js, Python, React, Next.js, Docker, PostgreSQL, Redis.',
+            'projects': '1. KINETIC-ENGINE (Rust/WASM Canvas)<br/>2. HYPER-QUEUE (Node/Redis Dispatcher)<br/>3. DEV-DOCK (Next.js Dashboard)<br/>4. LOG-SYNAPSE (FastAPI Log Parser)',
+            'cat bio.txt': 'Álvaro (alvrodah) is a full-stack engineer specializing in high-throughput backend services and modern frontend user experiences. Obsessed with clean architecture and performance.',
+            'contact': 'Email: contact@alvrodah.dev | GitHub: github.com/alvrodah | LinkedIn: linkedin.com/in/alvrodah'
+        };
+
+        function processCommand() {
+            const cmd = terminalInput.value.trim().toLowerCase();
+            if (!cmd) return;
+
+            // Echo input
+            const echoLine = document.createElement('div');
+            echoLine.className = 'text-raw-white font-bold';
+            echoLine.innerHTML = `<span class="text-raw-accent">visitor@alvrodah:~$</span> ${cmd}`;
+            terminalBody.appendChild(echoLine);
+
+            // Response
+            const responseLine = document.createElement('div');
+            responseLine.className = 'text-raw-dim pl-2';
+
+            if (cmd === 'clear') {
+                terminalBody.innerHTML = '';
+                terminalInput.value = '';
+                return;
+            } else if (commands[cmd]) {
+                responseLine.innerHTML = commands[cmd];
+            } else {
+                responseLine.innerHTML = `<span class="text-raw-accent2">Command not found: '${cmd}'. Type 'help' for available commands.</span>`;
+            }
+
+            terminalBody.appendChild(responseLine);
+            terminalInput.value = '';
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        if (terminalSubmit && terminalInput) {
+            terminalSubmit.addEventListener('click', processCommand);
+            terminalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') processCommand();
+            });
+        }
+
+        // 6. Copy Stack JSON to Clipboard
+        const copyBtn = document.getElementById('copy-json-btn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const text = `{ "developer": "alvrodah", "role": "Senior Engineer", "skills": ["TypeScript", "Rust", "Node.js", "React"] }`;
+                const tempInput = document.createElement('textarea');
+                tempInput.value = text;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                
+                copyBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-raw-accent"></i> Copied!`;
+                setTimeout(() => {
+                    copyBtn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Stack JSON`;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        // 7. Contact Form Handler
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                formStatus.classList.remove('hidden');
+                contactForm.reset();
+                setTimeout(() => {
+                    formStatus.classList.add('hidden');
+                }, 5000);
+            });
+        }
+    </script>
+</body>
+</html>
