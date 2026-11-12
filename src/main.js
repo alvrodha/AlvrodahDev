@@ -1,4 +1,5 @@
 import "./style.css";
+import { components } from "./library.js";
 
 const clockElement = document.getElementById("live-clock");
 
@@ -18,93 +19,178 @@ menuButton?.addEventListener("click", () => {
     mobileMenu?.classList.toggle("hidden");
 });
 
-const filterButtons = document.querySelectorAll(".skill-filter-btn");
-const skillCards = document.querySelectorAll(".skill-card");
+const componentGrid = document.getElementById("component-grid");
+const componentResults = document.getElementById("component-results");
+const componentSearch = document.getElementById("component-search");
+const componentFilters = document.querySelectorAll(".component-filter");
+const componentCards = [];
 
-filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-        filterButtons.forEach((filterButton) => {
-            filterButton.classList.remove("bg-raw-accent", "text-black", "font-bold");
-            filterButton.classList.add("text-raw-dim", "border-raw-border");
+function createElement(tagName, className, text) {
+    const element = document.createElement(tagName);
+    if (className) element.className = className;
+    if (text) element.textContent = text;
+    return element;
+}
+
+function createPreview(component) {
+    const preview = createElement("div", "component-preview");
+    preview.setAttribute("role", "img");
+    preview.setAttribute("aria-label", `${component.title} visual preview`);
+
+    if (component.preview === "spotlight") {
+        const spotlight = createElement("div", "library-spotlight");
+        spotlight.addEventListener("pointermove", (event) => {
+            const bounds = spotlight.getBoundingClientRect();
+            spotlight.style.setProperty("--x", `${event.clientX - bounds.left}px`);
+            spotlight.style.setProperty("--y", `${event.clientY - bounds.top}px`);
+        });
+        preview.append(spotlight);
+    } else if (component.preview === "aurora") {
+        for (let index = 0; index < 3; index += 1) {
+            preview.append(createElement("span", "library-aurora"));
+        }
+    } else if (component.preview === "login") {
+        const login = createElement("div", "library-login");
+        login.append(createElement("strong", "", "Welcome back"));
+
+        login.append(
+            createElement("span", "library-login__field", "Email address"),
+            createElement("span", "library-login__field", "Password"),
+            createElement("span", "library-login__button", "Sign in"),
+            createElement("small", "", "Visual demo only"),
+        );
+        preview.append(login);
+    } else if (component.preview === "button") {
+        preview.append(createElement("span", "library-glow-button", "Explore more"));
+    }
+
+    const label = createElement("span", "component-preview__label", "LIVE PREVIEW");
+    label.setAttribute("aria-hidden", "true");
+    preview.append(label);
+    return preview;
+}
+
+async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+
+    const temporaryInput = document.createElement("textarea");
+    temporaryInput.value = text;
+    temporaryInput.style.position = "fixed";
+    temporaryInput.style.opacity = "0";
+    document.body.append(temporaryInput);
+    let copied = false;
+    try {
+        temporaryInput.select();
+        copied = document.execCommand("copy");
+    } finally {
+        temporaryInput.remove();
+    }
+
+    if (!copied) {
+        throw new Error("Clipboard access is unavailable.");
+    }
+}
+
+function createComponentCard(component) {
+    const card = createElement("article", "component-card");
+    card.dataset.category = component.category;
+    card.dataset.search = [
+        component.title,
+        component.description,
+        ...component.tags,
+    ]
+        .join(" ")
+        .toLowerCase();
+
+    const content = createElement("div", "component-card__content");
+    content.append(
+        createElement("p", "component-card__category", component.category),
+        createPreview(component),
+        createElement("h3", "", component.title),
+        createElement("p", "component-card__description", component.description),
+    );
+
+    const tags = createElement("div", "component-card__tags");
+    component.tags.forEach((tag) => {
+        tags.append(createElement("span", "component-card__tag", tag));
+    });
+    content.append(tags);
+
+    const codeDetails = document.createElement("details");
+    codeDetails.className = "component-code";
+    codeDetails.append(createElement("summary", "", "View and copy source"));
+
+    const codeBlock = document.createElement("pre");
+    const code = document.createElement("code");
+    code.textContent = component.code;
+    codeBlock.append(code);
+    codeDetails.append(codeBlock);
+    content.append(codeDetails);
+
+    const actions = createElement("div", "component-card__actions");
+    const copyButton = createElement("button", "component-copy", "Copy code");
+    copyButton.type = "button";
+    const status = createElement("span", "component-copy-status");
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+
+    copyButton.addEventListener("click", async () => {
+        status.textContent = "Copying…";
+        try {
+            await copyText(component.code);
+            status.textContent = "Copied to clipboard.";
+        } catch {
+            status.textContent = "Copy failed. Select the code above to copy it.";
+        }
+    });
+
+    actions.append(copyButton, status);
+    content.append(actions);
+    card.append(content);
+    return card;
+}
+
+if (componentGrid && componentResults) {
+    components.forEach((component) => {
+        const card = createComponentCard(component);
+        componentCards.push(card);
+        componentGrid.append(card);
+    });
+
+    let activeFilter = "all";
+
+    function updateComponents() {
+        const searchTerm = componentSearch?.value.trim().toLowerCase() ?? "";
+        let visibleCount = 0;
+
+        componentCards.forEach((card) => {
+            const matchesFilter =
+                activeFilter === "all" || card.dataset.category === activeFilter;
+            const matchesSearch = card.dataset.search.includes(searchTerm);
+            card.hidden = !matchesFilter || !matchesSearch;
+            if (!card.hidden) visibleCount += 1;
         });
 
-        button.classList.add("bg-raw-accent", "text-black", "font-bold");
-        button.classList.remove("text-raw-dim", "border-raw-border");
+        componentResults.textContent = `${visibleCount} ${visibleCount === 1 ? "snippet" : "snippets"} shown`;
+    }
 
-        const filter = button.getAttribute("data-filter");
-
-        skillCards.forEach((card) => {
-            card.style.display =
-                filter === "all" || card.getAttribute("data-category") === filter
-                    ? "block"
-                    : "none";
+    componentFilters.forEach((button) => {
+        button.addEventListener("click", () => {
+            activeFilter = button.dataset.filter ?? "all";
+            componentFilters.forEach((filterButton) => {
+                const isActive = filterButton === button;
+                filterButton.classList.toggle("is-active", isActive);
+                filterButton.setAttribute("aria-pressed", String(isActive));
+            });
+            updateComponents();
         });
     });
-});
 
-const canvas = document.getElementById("project-canvas");
-const context = canvas?.getContext("2d");
-
-if (canvas && context) {
-    let width = 0;
-    let height = 0;
-    const particles = [];
-
-    function resizeCanvas() {
-        width = canvas.width = canvas.parentElement.clientWidth;
-        height = canvas.height = canvas.parentElement.clientHeight;
-    }
-
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    for (let index = 0; index < 35; index += 1) {
-        particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 1.5,
-            vy: (Math.random() - 0.5) * 1.5,
-            radius: Math.random() * 2 + 1,
-        });
-    }
-
-    function drawParticles() {
-        context.clearRect(0, 0, width, height);
-        context.fillStyle = "#CCFF00";
-        context.strokeStyle = "rgba(204, 255, 0, 0.15)";
-
-        for (let index = 0; index < particles.length; index += 1) {
-            const particle = particles[index];
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-
-            if (particle.x < 0 || particle.x > width) particle.vx *= -1;
-            if (particle.y < 0 || particle.y > height) particle.vy *= -1;
-
-            context.beginPath();
-            context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-            context.fill();
-
-            for (let nextIndex = index + 1; nextIndex < particles.length; nextIndex += 1) {
-                const nextParticle = particles[nextIndex];
-                const distance = Math.hypot(
-                    particle.x - nextParticle.x,
-                    particle.y - nextParticle.y,
-                );
-
-                if (distance < 80) {
-                    context.beginPath();
-                    context.moveTo(particle.x, particle.y);
-                    context.lineTo(nextParticle.x, nextParticle.y);
-                    context.stroke();
-                }
-            }
-        }
-
-        requestAnimationFrame(drawParticles);
-    }
-
-    drawParticles();
+    componentSearch?.addEventListener("input", updateComponents);
+    updateComponents();
 }
 
 const terminalBody = document.getElementById("terminal-body");
@@ -112,13 +198,13 @@ const terminalInput = document.getElementById("terminal-input");
 const terminalSubmit = document.getElementById("terminal-submit");
 
 const commands = {
-    help: 'Available commands: <br/>- <span class="text-raw-accent">skills</span>: Display core stack<br/>- <span class="text-raw-accent">projects</span>: View featured projects<br/>- <span class="text-raw-accent">cat bio.txt</span>: Print developer bio<br/>- <span class="text-raw-accent">clear</span>: Clear terminal window<br/>- <span class="text-raw-accent">contact</span>: Show contact links',
+    help: 'Available commands: <br/>- <span class="text-raw-accent">skills</span>: See technologies I have worked with<br/>- <span class="text-raw-accent">library</span>: Browse reusable snippets<br/>- <span class="text-raw-accent">cat bio.txt</span>: Read a short bio<br/>- <span class="text-raw-accent">clear</span>: Clear terminal window<br/>- <span class="text-raw-accent">contact</span>: Show contact links',
     skills:
-        "CORE TECH: TypeScript, Rust, Node.js, Python, React, Next.js, Docker, PostgreSQL, Redis.",
-    projects:
-        "1. KINETIC-ENGINE (Rust/WASM Canvas)<br/>2. HYPER-QUEUE (Node/Redis Dispatcher)<br/>3. DEV-DOCK (Next.js Dashboard)<br/>4. LOG-SYNAPSE (FastAPI Log Parser)",
+        "WORKED WITH: Java, JavaScript, TypeScript, Go, Node.js, React, Next.js, MySQL, PostgreSQL, Redis, ServiceNow, Git. Basic experience: Docker, Linux, Bootstrap.",
+    library:
+        "The component library has copyable snippets for pointer-reactive backgrounds, an animated aurora, a login UI demo, and a glow button. Type 'clear' to reset this terminal.",
     "cat bio.txt":
-        "Álvaro (alvrodah) is a full-stack engineer specializing in high-throughput backend services and modern frontend user experiences. Obsessed with clean architecture and performance.",
+        "Álvaro (alvrodah) is a junior developer learning by building, exploring web development, and sharing reusable interface experiments.",
     contact:
         "Email: contact@alvrodah.dev | GitHub: github.com/alvrodah | LinkedIn: linkedin.com/in/alvrodah",
 };
@@ -169,22 +255,37 @@ terminalInput?.addEventListener("keydown", (event) => {
 const copyButton = document.getElementById("copy-json-btn");
 
 copyButton?.addEventListener("click", () => {
-    const text =
-        '{ "developer": "alvrodah", "role": "Senior Engineer", "skills": ["TypeScript", "Rust", "Node.js", "React"] }';
-    const temporaryInput = document.createElement("textarea");
-    temporaryInput.value = text;
-    document.body.append(temporaryInput);
-    temporaryInput.select();
-    document.execCommand("copy");
-    temporaryInput.remove();
+    const text = JSON.stringify(
+        {
+            developer: "alvrodah",
+            role: "Junior Developer",
+            skills: [
+                "Java",
+                "JavaScript",
+                "TypeScript",
+                "Go",
+                "React",
+                "Node.js",
+                "MySQL",
+                "ServiceNow",
+                "Git",
+                "Docker (basic)",
+                "Linux (basic)",
+                "Bootstrap (basic)",
+            ],
+        },
+        null,
+        2,
+    );
+    const copyStatus = document.getElementById("copy-json-status");
 
-    copyButton.innerHTML =
-        '<i data-lucide="check" class="w-3.5 h-3.5 text-raw-accent"></i> Copied!';
-    window.setTimeout(() => {
-        copyButton.innerHTML =
-            '<i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Stack JSON';
-        window.lucide?.createIcons();
-    }, 2000);
+    copyText(text)
+        .then(() => {
+            if (copyStatus) copyStatus.textContent = "Copied.";
+        })
+        .catch(() => {
+            if (copyStatus) copyStatus.textContent = "Copy failed.";
+        });
 });
 
 const contactForm = document.getElementById("contact-form");

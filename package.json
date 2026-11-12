@@ -10,7 +10,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "check": "node --check src/main.js"
+    "check": "node --check src/main.js && node --check src/library.js"
   },
   "devDependencies": {
     "vite": "^8.3.8"
