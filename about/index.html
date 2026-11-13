@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <!-- @include head -->
+    <title data-i18n="meta.about.title">About Álvaro (alvrodah) — Junior Developer | alvrodahDev</title>
+    <meta name="description" data-i18n-attr="content:meta.about.description" content="About Álvaro (alvrodah), a junior developer working with JavaScript, TypeScript, Java, Go, Node.js, React, MySQL and ServiceNow.">
+    <link rel="canonical" href="%SITE_URL%/about/">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="%SITE_URL%/about/">
+    <meta property="og:title" content="About Álvaro (alvrodah) — Junior Developer">
+    <meta property="og:description" content="A junior developer learning by building, and the tools I've worked with.">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "url": "%SITE_URL%/about/",
+        "isPartOf": { "@id": "%SITE_URL%/#website" },
+        "mainEntity": { "@id": "%SITE_URL%/#person" },
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "%SITE_URL%/" },
+                { "@type": "ListItem", "position": 2, "name": "About", "item": "%SITE_URL%/about/" }
+            ]
+        }
+    }
+    </script>
+</head>
+<body class="bg-raw-bg text-raw-text font-sans antialiased" data-page="about">
+    <!-- @include header -->
+
+    <main id="main">
+        <section class="py-16 md:py-24 border-b border-raw-border relative overflow-hidden" aria-labelledby="about-title">
+            <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
+                <p class="font-mono text-xs text-raw-accent uppercase tracking-widest" data-i18n="about.kicker">// 01. WHO I AM</p>
+                <h1 id="about-title" class="text-4xl sm:text-6xl font-extrabold tracking-tight text-raw-strong leading-none" data-i18n="about.title">ABOUT ME</h1>
+                <p class="text-lg text-raw-dim font-mono leading-relaxed">
+                    <span data-i18n="home.introBefore">Hi, I'm </span><strong class="text-raw-strong">Álvaro (alvrodah)</strong><span data-i18n="about.p1">, a junior developer who learns best by building real things and sharing what works.</span>
+                </p>
+                <p class="text-lg text-raw-dim font-mono leading-relaxed" data-i18n="about.p2">This site is my workshop: a place to collect reusable interface experiments, write down what I learn, and keep improving in public.</p>
+                <p class="text-lg text-raw-dim font-mono leading-relaxed" data-i18n="about.p3">I'm interested in opportunities to keep learning, contribute to a team, and build useful software together.</p>
+            </div>
+        </section>
+
+        <section class="py-20 border-b border-raw-border" aria-labelledby="skills-title">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-12 border-b border-raw-border pb-6">
+                    <p class="font-mono text-xs text-raw-accent uppercase tracking-widest" data-i18n="about.toolbox.kicker">// 02. TOOLS I'VE WORKED WITH</p>
+                    <h2 id="skills-title" class="text-3xl sm:text-5xl font-extrabold text-raw-strong mt-1" data-i18n="about.toolbox.title">MY TOOLBOX</h2>
+                    <p class="font-mono text-sm text-raw-dim mt-4 max-w-2xl" data-i18n="about.toolbox.text">A snapshot of technologies I've used or explored—not a proficiency ranking. Docker, Linux, and Bootstrap are currently at a basic level for me.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="border border-raw-border bg-raw-panel p-6 hover:border-raw-accent transition-colors">
+                        <i data-lucide="code-xml" class="w-6 h-6 text-raw-accent mb-4"></i>
+                        <h3 class="font-mono font-bold text-xl text-raw-strong mb-3" data-i18n="about.toolbox.languagesTitle">Languages &amp; frameworks</h3>
+                        <p class="font-mono text-sm text-raw-dim leading-relaxed">Java, JavaScript, TypeScript, Go, Node.js, React, Next.js, Express, NestJS.</p>
+                    </article>
+                    <article class="border border-raw-border bg-raw-panel p-6 hover:border-raw-accent transition-colors">
+                        <i data-lucide="database" class="w-6 h-6 text-raw-accent mb-4"></i>
+                        <h3 class="font-mono font-bold text-xl text-raw-strong mb-3" data-i18n="about.toolbox.dataTitle">Data &amp; platforms</h3>
+                        <p class="font-mono text-sm text-raw-dim leading-relaxed">MySQL, PostgreSQL, Redis, GraphQL, ServiceNow.</p>
+                    </article>
+                    <article class="border border-raw-border bg-raw-panel p-6 hover:border-raw-accent transition-colors">
+                        <i data-lucide="wrench" class="w-6 h-6 text-raw-accent mb-4"></i>
+                        <h3 class="font-mono font-bold text-xl text-raw-strong mb-3" data-i18n="about.toolbox.toolsTitle">Tools &amp; workflow</h3>
+                        <p class="font-mono text-sm text-raw-dim leading-relaxed"><span>Git, GitHub Actions. </span><span data-i18n="about.toolbox.basic">Basic experience:</span><span> Docker, Linux, Bootstrap.</span></p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 border-b border-raw-border bg-raw-panel/30" aria-labelledby="about-cta-title">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+                <h2 id="about-cta-title" class="text-3xl sm:text-4xl font-extrabold text-raw-strong" data-i18n="about.ctaTitle">LET'S BUILD AND LEARN.</h2>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="/contact/" class="btn-primary" data-i18n="nav.contact">EXECUTE_CONTACT()</a>
+                    <a href="/library/" class="btn-secondary" data-i18n="home.ctaLibrary">BROWSE LIBRARY</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- @include footer -->
+</body>
+</html>

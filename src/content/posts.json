@@ -1,0 +1,75 @@
+[
+    {
+        "slug": "how-this-site-is-built",
+        "publishedAt": "2026-11-13",
+        "updatedAt": "2026-11-13",
+        "author": "Álvaro (alvrodah)",
+        "tags": ["vite", "javascript", "architecture"],
+        "translations": {
+            "en": {
+                "title": "How this site is built: Vite, plain JavaScript and a multi-page layout",
+                "excerpt": "A tour of the architecture behind this portfolio: static multi-page output, shared partials, a tiny i18n runtime, themeable CSS variables and a blog layer ready for a backend.",
+                "body": [
+                    { "type": "p", "text": "This portfolio started as a single long page. As it grew — a component library, a terminal, and now a blog — one page stopped making sense. Here is how it is organised now." },
+                    { "type": "h2", "text": "Multi-page, still static" },
+                    { "type": "p", "text": "Every section has its own HTML entry point (home, about, library, blog, terminal, contact). Vite builds each one into its own folder, so URLs like /about/ and /blog/ work on any static host without server rewrites." },
+                    { "type": "p", "text": "The header, footer and shared head tags live in partial files. A small Vite plugin inlines them at build time and marks the current page's navigation link with aria-current." },
+                    { "type": "h2", "text": "Themes with CSS variables" },
+                    { "type": "p", "text": "All colours are CSS custom properties declared through Tailwind's @theme. The theme dialog swaps those variables at runtime, and a tiny script in the <head> reapplies your saved choice before the first paint, so there is no flash of the default theme." },
+                    { "type": "code", "language": "css", "text": "@theme static {\n  --color-raw-bg: #0f1012;\n  --color-raw-accent: #ccff00;\n}" },
+                    { "type": "h2", "text": "A blog ready for a backend" },
+                    { "type": "p", "text": "Posts are read through a small service with a fixed contract: list posts, get a post, list tags. Today it reads a local JSON file; setting one environment variable switches it to a REST API without touching the pages." },
+                    { "type": "ul", "items": ["Post bodies are structured blocks, not raw HTML, so content from an API can never inject scripts.", "Every response is validated and normalised before rendering.", "Languages fall back to English when a translation is missing."] },
+                    { "type": "p", "text": "If you want to dig into the code, the repository is linked from the contact page." }
+                ]
+            },
+            "es": {
+                "title": "Cómo está hecha esta web: Vite, JavaScript puro y varias páginas",
+                "excerpt": "Un recorrido por la arquitectura de este portfolio: salida estática multipágina, parciales compartidos, un pequeño sistema de traducciones, temas con variables CSS y un blog preparado para un backend.",
+                "body": [
+                    { "type": "p", "text": "Este portfolio empezó como una única página larga. Al crecer —una librería de componentes, una terminal y ahora un blog— una sola página dejó de tener sentido. Así está organizado ahora." },
+                    { "type": "h2", "text": "Varias páginas, pero estática" },
+                    { "type": "p", "text": "Cada sección tiene su propio HTML de entrada (inicio, sobre mí, librería, blog, terminal, contacto). Vite genera cada una en su propia carpeta, así que URLs como /about/ y /blog/ funcionan en cualquier hosting estático sin reglas de reescritura." },
+                    { "type": "p", "text": "La cabecera, el pie y las etiquetas comunes del head viven en archivos parciales. Un pequeño plugin de Vite los inserta al compilar y marca el enlace de la página actual con aria-current." },
+                    { "type": "h2", "text": "Temas con variables CSS" },
+                    { "type": "p", "text": "Todos los colores son propiedades personalizadas declaradas con @theme de Tailwind. El diálogo de temas cambia esas variables en tiempo real, y un pequeño script en el <head> vuelve a aplicar tu elección guardada antes del primer pintado, sin parpadeos del tema por defecto." },
+                    { "type": "code", "language": "css", "text": "@theme static {\n  --color-raw-bg: #0f1012;\n  --color-raw-accent: #ccff00;\n}" },
+                    { "type": "h2", "text": "Un blog preparado para un backend" },
+                    { "type": "p", "text": "Los artículos se leen a través de un pequeño servicio con un contrato fijo: listar artículos, obtener un artículo y listar etiquetas. Hoy lee un JSON local; con una variable de entorno pasa a usar una API REST sin tocar las páginas." },
+                    { "type": "ul", "items": ["El contenido de los artículos son bloques estructurados, no HTML, así que una API nunca podrá inyectar scripts.", "Cada respuesta se valida y normaliza antes de pintarse.", "Si falta una traducción, se muestra la versión en inglés."] },
+                    { "type": "p", "text": "Si quieres ver el código, el repositorio está enlazado en la página de contacto." }
+                ]
+            }
+        }
+    },
+    {
+        "slug": "welcome-to-the-blog",
+        "publishedAt": "2026-11-12",
+        "author": "Álvaro (alvrodah)",
+        "tags": ["meta", "learning"],
+        "translations": {
+            "en": {
+                "title": "Welcome to the blog",
+                "excerpt": "Why I'm starting a blog as a junior developer, and what kind of posts you can expect here.",
+                "body": [
+                    { "type": "p", "text": "I learn best by building things and explaining them. Writing forces me to understand a topic well enough to put it into words, so this blog is part of how I learn." },
+                    { "type": "h2", "text": "What to expect" },
+                    { "type": "ul", "items": ["Short write-ups of things I've built and how they work.", "Notes on tools and languages I'm exploring.", "Mistakes I've made and what they taught me."] },
+                    { "type": "quote", "text": "Learning by building and sharing." },
+                    { "type": "p", "text": "Posts are available in English and Spanish. If something is unclear or wrong, I'd love to hear about it — the contact page has every way to reach me." }
+                ]
+            },
+            "es": {
+                "title": "Bienvenido al blog",
+                "excerpt": "Por qué empiezo un blog siendo desarrollador junior y qué tipo de artículos encontrarás aquí.",
+                "body": [
+                    { "type": "p", "text": "Aprendo mejor construyendo cosas y explicándolas. Escribir me obliga a entender un tema lo suficiente como para ponerlo en palabras, así que este blog forma parte de mi forma de aprender." },
+                    { "type": "h2", "text": "Qué encontrarás" },
+                    { "type": "ul", "items": ["Explicaciones breves de cosas que he construido y cómo funcionan.", "Notas sobre herramientas y lenguajes que estoy explorando.", "Errores que he cometido y lo que me enseñaron."] },
+                    { "type": "quote", "text": "Aprender construyendo y compartiendo." },
+                    { "type": "p", "text": "Los artículos están en inglés y en español. Si algo no queda claro o está mal, me encantará saberlo: en la página de contacto tienes todas las formas de escribirme." }
+                ]
+            }
+        }
+    }
+]

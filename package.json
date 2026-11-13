@@ -10,9 +10,21 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "check": "node --check src/main.js && node --check src/library.js"
+    "test": "node scripts/vitest.js run",
+    "test:watch": "node scripts/vitest.js",
+    "check": "npm test && npm run build",
+    "audit:deps": "npm audit --omit=dev"
   },
   "devDependencies": {
-    "vite": "^8.3.8"
+    "@tailwindcss/vite": "^4.3.5",
+    "jsdom": "^31.0.1",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "lucide": "^1.72.0"
   }
 }

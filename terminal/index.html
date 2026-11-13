@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <!-- @include head -->
+    <title data-i18n="meta.terminal.title">Interactive Terminal — Explore the Portfolio | alvrodahDev</title>
+    <meta name="description" data-i18n-attr="content:meta.terminal.description" content="An interactive terminal simulator: type commands to explore Álvaro's skills, component library, bio, and contact links.">
+    <link rel="canonical" href="%SITE_URL%/terminal/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="%SITE_URL%/terminal/">
+    <meta property="og:title" content="Interactive Terminal — alvrodahDev">
+    <meta property="og:description" content="Explore the portfolio from a simulated shell.">
+</head>
+<body class="bg-raw-bg text-raw-text font-sans antialiased" data-page="terminal">
+    <!-- @include header -->
+
+    <main id="main" class="py-16 md:py-20 border-b border-raw-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-raw-border pb-4">
+                <div>
+                    <p class="font-mono text-xs text-raw-accent uppercase tracking-widest" data-i18n="terminal.kicker">// 04. INTERACTIVE CLI</p>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-raw-strong mt-1" data-i18n="terminal.title">EMBEDDED TERMINAL SIMULATOR</h1>
+                </div>
+                <p class="font-mono text-xs text-raw-dim mt-2 md:mt-0">
+                    <span data-i18n="terminal.hintBefore">Type</span> <span class="text-raw-accent">`help`</span> <span data-i18n="terminal.hintAfter">to inspect available shell commands.</span>
+                </p>
+            </div>
+
+            <div class="border-2 border-raw-border bg-raw-deep shadow-brutal font-mono text-xs sm:text-sm overflow-hidden">
+                <div class="bg-raw-panel px-4 py-3 border-b border-raw-border flex items-center justify-between" aria-hidden="true">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span class="ml-2 text-raw-dim text-xs" data-i18n="terminal.windowTitle">portfolio terminal simulator</span>
+                    </div>
+                    <div class="text-raw-dim text-xs hidden sm:block">TTY /dev/pts/0</div>
+                </div>
+
+                <div id="terminal-body" class="p-4 sm:p-6 h-96 overflow-y-auto space-y-3 text-raw-text" role="log" aria-live="polite" tabindex="0" data-i18n-attr="aria-label:terminal.outputLabel" aria-label="Terminal output">
+                    <div class="text-raw-dim">
+                        <span>alvrodah.dev // </span><span data-i18n="terminal.intro">interactive portfolio demo</span>
+                    </div>
+                    <div class="text-raw-accent" data-i18n="terminal.welcome">Welcome visitor! Type 'help' for a list of available commands.</div>
+                </div>
+
+                <form id="terminal-form" class="border-t border-raw-border bg-raw-panel px-4 py-3 flex items-center gap-2" autocomplete="off">
+                    <label for="terminal-input" class="text-raw-accent font-bold shrink-0">visitor@alvrodah:~$</label>
+                    <input type="text" id="terminal-input" maxlength="100" spellcheck="false" autocapitalize="off" class="bg-transparent border-none outline-none text-raw-strong flex-1 min-w-0 font-mono" data-i18n-attr="placeholder:terminal.placeholder" placeholder="Type command here...">
+                    <button type="submit" class="px-3 py-1 bg-raw-accent text-raw-ink font-bold text-xs hover:bg-raw-strong hover:text-raw-bg transition-colors" data-i18n="terminal.run">RUN</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- @include footer -->
+</body>
+</html>

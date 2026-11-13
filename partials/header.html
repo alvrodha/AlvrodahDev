@@ -1,0 +1,74 @@
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-raw-accent focus:text-raw-ink font-mono text-sm font-bold" data-i18n="common.skip">Skip to content</a>
+
+    <!-- Top bar: theme (left) · status ticker · language (right) -->
+    <div class="sticky top-0 z-50 h-8 flex items-stretch justify-between border-b border-raw-border bg-raw-deep/90 backdrop-blur-md text-xs font-mono">
+        <div class="flex items-stretch shrink-0 border-r border-raw-border">
+            <button type="button" id="theme-button" class="topbar-button" aria-haspopup="dialog" aria-controls="theme-dialog">
+                <i data-lucide="palette" class="w-3.5 h-3.5"></i>
+                <span data-i18n="topbar.theme">THEME</span>
+            </button>
+            <div class="hidden sm:flex items-center gap-3 pl-3 pr-4 border-l border-raw-border">
+                <span class="flex h-2 w-2 relative" aria-hidden="true">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-raw-accent opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-raw-accent"></span>
+                </span>
+                <span class="text-raw-dim" data-i18n="topbar.status">[STATUS: AVAILABLE_FOR_HIRE]</span>
+            </div>
+        </div>
+
+        <div class="overflow-hidden whitespace-nowrap flex-1 flex items-center" aria-hidden="true">
+            <div class="animate-marquee text-raw-dim">
+                <span class="mx-4" data-i18n="topbar.marquee.operational">⚡ SYSTEM: OPERATIONAL</span>
+                <span class="text-raw-accent" data-i18n="topbar.marquee.exploring">/// EXPLORING: JAVASCRIPT, TYPESCRIPT, JAVA, MYSQL</span>
+                <span class="mx-4" data-i18n="topbar.marquee.learning">⚡ LEARNING BY BUILDING AND SHARING</span>
+                <span class="text-raw-accent2" data-i18n="topbar.marquee.open">/// OPEN FOR FREELANCE &amp; FULL-TIME ROLES</span>
+                <span class="mx-4" data-i18n="topbar.marquee.operational">⚡ SYSTEM: OPERATIONAL</span>
+                <span class="text-raw-accent" data-i18n="topbar.marquee.exploring">/// EXPLORING: JAVASCRIPT, TYPESCRIPT, JAVA, MYSQL</span>
+                <span class="mx-4" data-i18n="topbar.marquee.learning">⚡ LEARNING BY BUILDING AND SHARING</span>
+                <span class="text-raw-accent2" data-i18n="topbar.marquee.open">/// OPEN FOR FREELANCE &amp; FULL-TIME ROLES</span>
+            </div>
+        </div>
+
+        <div class="flex items-stretch shrink-0 border-l border-raw-border">
+            <span id="live-clock" class="hidden lg:flex items-center px-3 text-raw-dim">00:00:00 UTC</span>
+            <div class="relative flex items-stretch border-l border-raw-border">
+                <button type="button" id="lang-button" class="topbar-button" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-menu" data-i18n-attr="aria-label:topbar.language">
+                    <i data-lucide="languages" class="w-3.5 h-3.5"></i>
+                    <span id="lang-current">EN</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <ul id="lang-menu" class="lang-menu" role="menu" aria-labelledby="lang-button" hidden></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main navigation -->
+    <header class="sticky top-8 z-40 border-b border-raw-border bg-raw-bg/80 backdrop-blur-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-i18n-attr="aria-label:nav.label" aria-label="Main navigation">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="font-mono text-xl font-bold tracking-tighter text-raw-strong hover:text-raw-accent transition-colors" aria-label="alvrodah.dev — home">
+                    <span class="text-raw-accent">&lt;</span>alvrodah.dev<span class="text-raw-accent">&gt;</span>
+                </a>
+
+                <ul class="hidden md:flex items-center gap-1 font-mono text-sm">
+                    <li><a href="/about/" data-nav="about" class="nav-link"><span aria-hidden="true">01.// </span><span data-i18n="nav.about">ABOUT</span></a></li>
+                    <li><a href="/library/" data-nav="library" class="nav-link"><span aria-hidden="true">02.// </span><span data-i18n="nav.library">LIBRARY</span></a></li>
+                    <li><a href="/blog/" data-nav="blog" class="nav-link"><span aria-hidden="true">03.// </span><span data-i18n="nav.blog">BLOG</span></a></li>
+                    <li><a href="/terminal/" data-nav="terminal" class="nav-link"><span aria-hidden="true">04.// </span><span data-i18n="nav.terminal">TERMINAL</span></a></li>
+                    <li class="ml-4"><a href="/contact/" data-nav="contact" class="btn-primary !px-4 !py-2" data-i18n="nav.contact">EXECUTE_CONTACT()</a></li>
+                </ul>
+
+                <button type="button" id="mobile-menu-btn" class="md:hidden p-2 border border-raw-border text-raw-dim hover:text-raw-accent hover:border-raw-accent" aria-expanded="false" aria-controls="mobile-menu" data-i18n-attr="aria-label:nav.menu" aria-label="Open menu">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </nav>
+
+        <ul id="mobile-menu" class="md:hidden border-t border-raw-border bg-raw-panel px-4 pt-2 pb-4 space-y-1 font-mono text-sm" hidden>
+            <li><a href="/about/" data-nav="about" class="nav-link block"><span aria-hidden="true">01.// </span><span data-i18n="nav.about">ABOUT</span></a></li>
+            <li><a href="/library/" data-nav="library" class="nav-link block"><span aria-hidden="true">02.// </span><span data-i18n="nav.library">LIBRARY</span></a></li>
+            <li><a href="/blog/" data-nav="blog" class="nav-link block"><span aria-hidden="true">03.// </span><span data-i18n="nav.blog">BLOG</span></a></li>
+            <li><a href="/terminal/" data-nav="terminal" class="nav-link block"><span aria-hidden="true">04.// </span><span data-i18n="nav.terminal">TERMINAL</span></a></li>
+            <li><a href="/contact/" data-nav="contact" class="btn-primary w-full mt-2" data-i18n="nav.contact">EXECUTE_CONTACT()</a></li>
+        </ul>
+    </header>
