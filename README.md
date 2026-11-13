@@ -26,6 +26,12 @@ Vite prints the local development URL after startup.
 The site is static; it does not provide a backend or process contact-form
 submissions.
 
+## Deployment
+
+The workflow builds and deploys the `pre` branch to GitHub Pages. To deploy
+manually, select `pre` when starting the workflow. In the repository's Pages
+settings, set the build and deployment source to **GitHub Actions**.
+
 ## Component library
 
 The portfolio includes searchable, filterable interface snippets with live

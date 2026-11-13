@@ -102,6 +102,11 @@ describe("SEO", () => {
         }
         expect(broken).toEqual([]);
     });
+
+    it.each(pages)("$id links the built stylesheet", ({ id }) => {
+        expect(docs[id].doc.querySelector('link[rel="stylesheet"]')?.getAttribute("href"))
+            .toMatch(/^\/assets\/.+\.css$/);
+    });
 });
 
 describe("security", () => {
