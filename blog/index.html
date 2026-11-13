@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <!-- @include head -->
+    <title data-i18n="meta.blog.title">Dev Blog — Notes on Learning &amp; Building Software | alvrodahDev</title>
+    <meta name="description" data-i18n-attr="content:meta.blog.description" content="A junior developer's blog: practical notes on web development, JavaScript, reusable UI, and lessons learned while building real projects.">
+    <link rel="canonical" href="%SITE_URL%/blog/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="%SITE_URL%/blog/">
+    <meta property="og:title" content="Dev Blog — alvrodahDev">
+    <meta property="og:description" content="Practical notes on web development, JavaScript, and reusable UI.">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "@id": "%SITE_URL%/blog/#blog",
+        "name": "alvrodahDev blog",
+        "url": "%SITE_URL%/blog/",
+        "isPartOf": { "@id": "%SITE_URL%/#website" },
+        "author": { "@id": "%SITE_URL%/#person" }
+    }
+    </script>
+</head>
+<body class="bg-raw-bg text-raw-text font-sans antialiased" data-page="blog">
+    <!-- @include header -->
+
+    <main id="main" class="py-16 md:py-20 border-b border-raw-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 border-b border-raw-border pb-6">
+                <p class="font-mono text-xs text-raw-accent uppercase tracking-widest" data-i18n="blog.kicker">// 03. LOGS &amp; NOTES</p>
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-raw-strong mt-1" data-i18n="blog.title">DEV BLOG</h1>
+                <p class="font-mono text-sm text-raw-dim mt-4 max-w-2xl" data-i18n="blog.text">Notes on what I'm learning, things I've built, and mistakes worth sharing.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
+                <div id="blog-tags" class="flex flex-wrap gap-2 font-mono text-xs" role="group" data-i18n-attr="aria-label:blog.tagsLabel" aria-label="Filter by tag"></div>
+                <form id="blog-search-form" role="search" class="font-mono text-xs">
+                    <label>
+                        <span class="sr-only" data-i18n="blog.searchLabel">Search posts</span>
+                        <input id="blog-search" type="search" name="q" maxlength="80" data-i18n-attr="placeholder:blog.searchPlaceholder" placeholder="Search posts..." class="w-full sm:w-64 bg-raw-bg border border-raw-border px-3 py-2 text-raw-strong focus:border-raw-accent focus:outline-none">
+                    </label>
+                </form>
+            </div>
+
+            <p id="blog-status" class="font-mono text-xs text-raw-dim mb-4" role="status" aria-live="polite"></p>
+            <div id="blog-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-busy="true"></div>
+            <nav id="blog-pagination" class="flex items-center justify-center gap-4 mt-12 font-mono text-sm" data-i18n-attr="aria-label:blog.paginationLabel" aria-label="Pagination" hidden></nav>
+        </div>
+    </main>
+
+    <!-- @include footer -->
+</body>
+</html>

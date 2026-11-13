@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <!-- @include head -->
+    <!-- Title, description, canonical, Open Graph and JSON-LD are set per post by src/pages/blog-post.js -->
+    <title>Blog post | alvrodahDev</title>
+    <meta name="description" content="Read this post on the alvrodahDev blog.">
+    <link rel="canonical" href="%SITE_URL%/blog/">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="%SITE_URL%/blog/">
+    <meta property="og:title" content="alvrodahDev blog">
+    <meta property="og:description" content="Read this post on the alvrodahDev blog.">
+</head>
+<body class="bg-raw-bg text-raw-text font-sans antialiased" data-page="post">
+    <!-- @include header -->
+
+    <main id="main" class="py-12 md:py-16 border-b border-raw-border">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="font-mono text-xs text-raw-dim mb-8" data-i18n-attr="aria-label:post.breadcrumb" aria-label="Breadcrumb">
+                <ol class="flex flex-wrap items-center gap-2">
+                    <li><a href="/" class="hover:text-raw-accent" data-i18n="nav.home">HOME</a></li>
+                    <li aria-hidden="true">/</li>
+                    <li><a href="/blog/" class="hover:text-raw-accent" data-i18n="nav.blog">BLOG</a></li>
+                    <li aria-hidden="true">/</li>
+                    <li id="post-breadcrumb" class="text-raw-strong truncate max-w-[14rem]" aria-current="page"></li>
+                </ol>
+            </nav>
+
+            <article id="post" aria-busy="true">
+                <div class="space-y-4" aria-hidden="true">
+                    <div class="skeleton h-4 w-40"></div>
+                    <div class="skeleton h-12 w-full"></div>
+                    <div class="skeleton h-4 w-full"></div>
+                    <div class="skeleton h-4 w-5/6"></div>
+                    <div class="skeleton h-4 w-4/6"></div>
+                </div>
+            </article>
+
+            <div class="mt-16 pt-8 border-t border-raw-border">
+                <a href="/blog/" class="btn-secondary">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span data-i18n="post.back">Back to all posts</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- @include footer -->
+</body>
+</html>

@@ -26,6 +26,17 @@ Vite prints the local development URL after startup.
 The site is static; it does not provide a backend or process contact-form
 submissions.
 
+## Component library
+
+The portfolio includes searchable, filterable interface snippets with live
+previews and copy buttons. Add or edit entries in `src/library.js`; each entry
+contains its title, category, description, tags, preview type, and copyable
+source. Preview renderers and interactions are in `src/main.js`, and their
+styles are in `src/style.css`.
+
+The login component is a visual example only, not an authentication system.
+Review and adapt snippets for your project before using them.
+
 ## Sensitive files
 
 Keep credentials in local environment files and never commit secrets or private
